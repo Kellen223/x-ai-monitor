@@ -4,45 +4,29 @@
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)
 
-通过 [Jina Reader](https://r.jina.ai) 免认证抓取 X/Twitter 账号页面，自动解析推文、去重过滤、生成 Markdown 报告。适用于 **Codex、OpenClaw、Cursor** 等 AI Agent，也支持 CLI 环境直接运行。
+通过 [Jina Reader](https://r.jina.ai) 免认证抓取 X/Twitter 账号页面，自动解析推文、去重过滤、生成 Markdown 报告。适用于 **Codex、OpenClaw、Cursor** 等 AI Agent，也支持直接 CLI 运行。
 
 ---
 
-## 🚀 一键安装（推荐）
+## 安装
 
-把下面这段话发给你的 **Codex / OpenClaw / Cursor** 等 AI Agent，它会自动帮你装好：
+把下面这段话发给你的 AI Agent，会自动完成安装和配置：
 
-> 请安装 GitHub 项目 Kellen223/x-ai-monitor，然后运行全量扫描生成 AI 资讯报告
+> 从 https://github.com/Kellen223/x-ai-monitor 安装并运行全量扫描
 
-Agent 会自动完成 clone、装依赖、提醒你改配置、然后跑起来。
-
----
-
-## ⚙️ 手动安装
+也支持手动安装：
 
 ```bash
 git clone https://github.com/Kellen223/x-ai-monitor.git
 cd x-ai-monitor
 pip install -r requirements.txt
-```
-
-编辑 `scripts/config.py` 填入你想监控的账号：
-
-```python
-KOL_ACCOUNTS = ["goodside", "kobaltzai"]
-ORG_ACCOUNTS = ["OpenAI", "AnthropicAI"]
-```
-
-运行：
-
-```bash
 cd scripts
-python monitor.py              # 全量扫描
-python monitor.py --org-only   # 仅扫机构号
-python monitor.py --single goodside  # 扫单个账号
+python monitor.py
 ```
 
-## 📦 输出示例
+首次运行后修改 `scripts/config.py` 中的账号列表即可开始监控。
+
+## 输出示例
 
 ```
 # X/Twitter AI 资讯监控报告
@@ -54,14 +38,6 @@ python monitor.py --single goodside  # 扫单个账号
 ```
 
 报告文件保存在 `scripts/output/` 目录下。
-
-## ✨ 亮点
-
-- **零认证** — 不需要 Twitter Cookie 或 API Key
-- **不重复** — 旧推文自动跳过，跑多少次都一样
-- **安静** — 自动筛掉导航文案、互动数据等噪音
-- **不改代码** — 改一个 Python 列表就能增减监控账号
-- **标准输出** — Markdown 格式，任何 Agent 都能消费
 
 ## 工作流
 
@@ -84,6 +60,14 @@ x-ai-monitor/
 └── agents/
     └── openai.yaml
 ```
+
+## 亮点
+
+- **零认证** — 不需要 Twitter Cookie 或 API Key
+- **不重复** — 旧推文自动跳过，跑多少次都一样
+- **安静** — 自动筛掉导航文案、互动数据等噪音
+- **不改代码** — 改一个 Python 列表就能增减监控账号
+- **标准输出** — Markdown 格式，任何 Agent 都能消费
 
 ## License
 
