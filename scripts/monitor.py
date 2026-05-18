@@ -44,7 +44,7 @@ from config import (
 # ==================== 噪声过滤模式 ====================
 
 NOISE_PATTERNS = [
-    r"Don\\'t miss what\'s happening",
+    r"Don't miss what's happening",
     r"Log in",
     r"Sign up",
     r"Terms of Service",
@@ -89,6 +89,7 @@ def parse_account_tweets(markdown_text: str) -> list[dict]:
     # Step 3: 按日期行分割为推文
     tweets = []
     current_tweet = []
+    date_match = ""
 
     for line in cleaned:
         if DATE_REGEX.search(line):
@@ -105,7 +106,7 @@ def parse_account_tweets(markdown_text: str) -> list[dict]:
     if current_tweet:
         content = " ".join(current_tweet).strip()
         if content:
-            tweets.append({"raw_content": content, "date_hint": date_match if "date_match" in dir() else ""})
+            tweets.append({"raw_content": content, "date_hint": date_match})
 
     return tweets
 
@@ -216,6 +217,9 @@ def search_exa(query: str = "latest AI news breakthrough 2026", max_results: int
     try:
         url = "https://api.exa.ai/search"
         headers = {"Content-Type": "application/json"}
+        api_key = os.environ.get("EXA_API_KEY", "")
+        if api_key:
+            headers["x-api-key"] = api_key
         payload = {
             "query": query,
             "numResults": max_results,
@@ -234,6 +238,9 @@ def search_exa(query: str = "latest AI news breakthrough 2026", max_results: int
                     items.append(f"- [{title}]({link})")
             print(f"{len(items)} 条")
             return items
+        elif resp.status_code == 401:
+            print(f"Exa API 需要设置 EXA_API_KEY 环境变量")
+            return []
         else:
             print(f"Exa API 返回 {resp.status_code}")
             return []

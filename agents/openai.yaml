@@ -1,4 +1,4 @@
-﻿interface:
+interface:
   display_name: "X/Twitter AI 资讯监控"
   short_description: "抓取 X/Twitter AI 资讯，生成结构化报告"
   icon_small: "./assets/x-ai-monitor-small.png"

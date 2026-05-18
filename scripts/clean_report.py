@@ -66,6 +66,8 @@ def main():
     cleaned = clean_report(content)
 
     out_path = os.path.join(OUTPUT_DIR, "report_clean.md")
+    if os.path.exists(out_path):
+        print(f"  ⚠️  覆盖已有文件: {out_path}")
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(cleaned)
 

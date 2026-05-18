@@ -13,8 +13,9 @@
 ## 快速开始
 
 ```bash
-pip install requests
-cd scripts
+git clone https://github.com/Kellen223/x-ai-monitor.git
+cd x-ai-monitor
+pip install -r requirements.txt
 ```
 
 编辑 `scripts/config.py` 填入你想监控的账号：
@@ -27,30 +28,36 @@ ORG_ACCOUNTS = ["OpenAI", "AnthropicAI", "GoogleDeepMind"]
 运行：
 
 ```bash
+cd scripts
 python monitor.py              # 全量扫描
 python monitor.py --org-only   # 仅扫机构号
 python monitor.py --single goodside  # 扫单个账号
 ```
 
+> **可选 Exa 热搜**：设置 `EXA_API_KEY` 环境变量可启用 AI 热点搜索补充。
+
 ## 工作流
 
 ```
 X/Twitter 账号 → Jina Reader（免Cookie）→ Python 解析 → 去重/过滤 → Markdown 报告
+                          ↑（可选 Exa 搜索补充）
 ```
 
 ## 仓库结构
 
 ```
 x-ai-monitor/
-├── SKILL.md              # 核心说明文档
+├── SKILL.md              # 核心说明文档（Codex Skill 入口）
+├── requirements.txt      # Python 依赖
+├── .gitignore
 ├── scripts/
 │   ├── config.py         # 监控账号列表 & 参数
 │   ├── monitor.py        # 主扫描脚本
 │   ├── org_scan.py       # 机构号增量扫描
-│   └── clean_report.py   # 报告清洗
+│   └── clean_report.py   # 报告清洗（可选）
 ├── agents/
 │   └── openai.yaml       # UI 元数据
-└── assets/
+└── assets/               # 图标资源
 ```
 
 ---

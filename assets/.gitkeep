@@ -1,0 +1,4 @@
+# assets/ - 存放项目图标等资源文件
+# 按需添加:
+#   x-ai-monitor-small.png  - 小图标 (32x32)
+#   x-ai-monitor.svg        - 大图标

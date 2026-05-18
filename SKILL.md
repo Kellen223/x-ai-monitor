@@ -1,4 +1,4 @@
-﻿---
+---
 name: x-ai-monitor
 description: X/Twitter AI 资讯监控 Skill。通过 Jina Reader（免认证）抓取 KOL 和机构的最新推文，去重过滤后生成结构化 Markdown 报告。适用于：(1) 追踪 AI 行业动态和 KOL 观点，(2) 定时生成 AI 资讯日报/周报，(3) 监控特定账号的新推文。
 ---
@@ -23,35 +23,51 @@ graph LR
     B --> C["Python 解析器"]
     C --> D["去重/过滤"]
     D --> E["Markdown 报告"]
-    F["Exa 搜索<br/>(可选)"] -.-> E
+    F["Exa 搜索<br/>(可选，需API Key)"] -.-> E
 ```
 
 ## 前置条件
 
-Python 3.8+，`pip install requests`，网络能访问 `r.jina.ai`。
+- Python 3.8+
+- `pip install -r requirements.txt`
+- 网络能访问 `r.jina.ai`
+- （可选）[Exa API Key](https://exa.ai) — 如需全网热搜补充，设置 `EXA_API_KEY` 环境变量
 
 ## 文件结构
 
 ```
 x-ai-monitor/
-├── SKILL.md
+├── SKILL.md               # 本文件
+├── requirements.txt       # Python 依赖
+├── .gitignore
 ├── scripts/
-│   ├── config.py        # 监控账号列表 & 参数（改这个就行）
-│   ├── monitor.py       # 主扫描脚本
-│   ├── org_scan.py      # 机构号增量扫描
-│   └── clean_report.py  # 报告清洗（可选）
-├── state/               # 运行状态（自动生成）
-│   ├── last_run.json    # 已见 hash 列表
-│   └── accounts/        # 各账号推文 JSON
-├── output/              # 报告输出（自动生成）
+│   ├── config.py          # 监控账号列表 & 参数（改这个就行）
+│   ├── monitor.py         # 主扫描脚本
+│   ├── org_scan.py        # 机构号增量扫描
+│   └── clean_report.py    # 报告清洗（可选）
 ├── agents/
 │   └── openai.yaml
-└── assets/
+└── assets/                # 图标资源
+```
+
+运行时自动生成：
+```
+state/              # 运行状态
+├── last_run.json   # 已见 hash 列表
+└── accounts/       # 各账号推文 JSON
+output/             # 报告输出
 ```
 
 ## 快速开始
 
-### 1. 改配置
+### 1. 安装依赖
+
+```bash
+cd x-ai-monitor
+pip install -r requirements.txt
+```
+
+### 2. 改配置
 
 编辑 `scripts/config.py`，填入你想监控的账号：
 
@@ -60,10 +76,10 @@ KOL_ACCOUNTS = ["goodside", "kobaltzai", "Thom_Wolf"]
 ORG_ACCOUNTS = ["OpenAI", "AnthropicAI", "GoogleDeepMind"]
 ```
 
-### 2. 运行
+### 3. 运行
 
 ```bash
-cd x-ai-monitor/scripts
+cd scripts
 
 # 全量扫描（KOL + 机构）
 python monitor.py
@@ -71,8 +87,14 @@ python monitor.py
 # 仅扫机构号（适合高频增量）
 python monitor.py --org-only
 
+# 仅扫 KOL
+python monitor.py --kol-only
+
 # 仅扫某个账号
 python monitor.py --single goodside
+
+# 跳过 Exa 补充搜索
+python monitor.py --no-exa
 ```
 
 ## 怎么去重的
@@ -122,6 +144,7 @@ python monitor.py --single goodside
 - 适合**公开账号**的资讯监控，无法抓取需要登录才能查看的私密推文
 - Jina Reader 依赖网络，建议在网络稳定的环境运行
 - 默认监控账号列表是示例，用之前务必改成你自己的
+- Exa 热搜功能需要设置 `EXA_API_KEY` 环境变量（[获取 Key](https://exa.ai)）
 
 ## 参数速查
 
