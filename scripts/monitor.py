@@ -1,4 +1,4 @@
-﻿"""
+"""
 X/Twitter AI 资讯监控 - 主抓取脚本
 
 用法:
@@ -19,8 +19,6 @@ import hashlib
 import json
 import os
 import re
-import subprocess
-import sys
 import time
 from datetime import datetime
 from urllib.parse import quote

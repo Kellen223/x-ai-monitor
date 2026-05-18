@@ -1,4 +1,4 @@
-﻿"""
+"""
 机构号增量扫描脚本
 
 专门扫描机构号，适用于高频增量扫描（比如每小时一次）。
@@ -7,7 +7,6 @@
     python org_scan.py
 """
 
-import sys
 from monitor import scan_account, save_report, generate_report, search_exa
 from config import ORG_ACCOUNTS, OUTPUT_DIR
 

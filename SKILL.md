@@ -58,6 +58,14 @@ state/              # 运行状态
 output/             # 报告输出
 ```
 
+## 安装
+
+把下面这段话发给你的 AI Agent，会自动完成安装和配置：
+
+> 从 https://github.com/Kellen223/x-ai-monitor 安装并运行全量扫描
+
+---
+
 ## 快速开始
 
 ### 1. 安装依赖

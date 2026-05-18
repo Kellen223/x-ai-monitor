@@ -1,4 +1,6 @@
-﻿# X/Twitter AI 资讯监控 - 配置
+import os
+
+# X/Twitter AI 资讯监控 - 配置
 # 修改此文件即可自定义监控账号和输出方式
 
 # ==================== 监控账号 ====================
@@ -40,7 +42,6 @@ ORG_ACCOUNTS = [
 # ==================== 输出设置 ====================
 
 # 报告输出目录（默认当前目录下的 output/）
-import os
 OUTPUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "output")
 
 # 状态保存目录
