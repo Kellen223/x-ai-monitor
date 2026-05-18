@@ -1,6 +1,6 @@
 # X/Twitter AI 资讯监控 (x-ai-monitor)
 
-通过 [Jina Reader] (https://r.jina.ai) 免认证抓取 X/Twitter 账号页面，自动解析推文、去重过滤、生成 Markdown 报告。
+通过 [Jina Reader](https://r.jina.ai) 免认证抓取 X/Twitter 账号页面，自动解析推文、去重过滤、生成 Markdown 报告。
 
 ## 亮点
 
