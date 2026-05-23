@@ -1,10 +1,10 @@
 interface:
   display_name: "X/Twitter AI 资讯监控"
-  short_description: "抓取 X/Twitter AI 资讯，生成结构化报告"
+  short_description: "抓取 X/Twitter AI 资讯，生成结构化报告；可选 Hermes Tweet / Xquik 读后端"
   icon_small: "./assets/x-ai-monitor-small.png"
   icon_large: "./assets/x-ai-monitor.svg"
   brand_color: "#000000"
-  default_prompt: "Use $x-ai-monitor to scan the configured X/Twitter AI accounts and generate a Markdown report."
+  default_prompt: "Use $x-ai-monitor to scan configured X/Twitter AI accounts and generate a Markdown report. If X_MONITOR_BACKEND=hermes-tweet and XQUIK_API_KEY are set, use Hermes Tweet / Xquik for account reads."
 
 dependencies:
   tools:

@@ -14,6 +14,8 @@ X/Twitter AI 资讯监控 - 主抓取脚本
     Jina Reader → Python 解析 → 去重/过滤 → Markdown 报告
 """
 
+from __future__ import annotations
+
 import argparse
 import hashlib
 import json
@@ -36,8 +38,12 @@ from config import (
     MIN_TWEET_LENGTH,
     ORG_ACCOUNTS,
     OUTPUT_DIR,
+    READ_BACKEND,
     STATE_DIR,
+    XQUIK_API_KEY,
+    XQUIK_BASE_URL,
 )
+from hermes_tweet import HermesTweetError, backend_enabled, fetch_account_tweets
 
 # ==================== 噪声过滤模式 ====================
 
@@ -171,6 +177,27 @@ def fetch_user_page(username: str) -> str | None:
         return None
 
 
+def fetch_user_tweets(username: str) -> list[dict]:
+    """按配置选择 Jina Reader 或 Hermes Tweet 读取账号推文。"""
+    if backend_enabled(READ_BACKEND):
+        try:
+            limit = max(MAX_TWEETS_KOL, MAX_TWEETS_ORG)
+            return fetch_account_tweets(
+                username,
+                limit=limit,
+                api_key=XQUIK_API_KEY,
+                base_url=XQUIK_BASE_URL,
+            )
+        except (HermesTweetError, requests.RequestException) as e:
+            print(f"  [ERROR] Hermes Tweet 抓取 {username} 失败: {e}")
+            return []
+
+    markdown = fetch_user_page(username)
+    if not markdown:
+        return []
+    return parse_account_tweets(markdown)
+
+
 def save_account_tweets(username: str, tweets: list[dict]):
     """保存单个账号的推文 JSON"""
     acct_dir = os.path.join(STATE_DIR, "accounts")
@@ -183,12 +210,11 @@ def save_account_tweets(username: str, tweets: list[dict]):
 def scan_account(username: str) -> list[str]:
     """扫描单个账号，返回新推文列表"""
     print(f"  → 抓取 @{username}...", end=" ")
-    markdown = fetch_user_page(username)
-    if not markdown:
+    parsed = fetch_user_tweets(username)
+    if not parsed:
         print("✗")
         return []
 
-    parsed = parse_account_tweets(markdown)
     print(f"{len(parsed)} 条原始推文", end="")
 
     # 过滤噪声 + 去重

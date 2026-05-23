@@ -14,6 +14,7 @@ description: X/Twitter AI 资讯监控 Skill。通过 Jina Reader（免认证）
 - **安静**：自动筛掉导航文案、互动数据、短内容等噪音
 - **好配**：改一个 Python 列表就能增减监控账号
 - **不绑定**：输出标准 Markdown，想用哪用哪
+- **可选结构化读取**：已有 Hermes Tweet / Xquik key 时，可切换账号读取后端
 
 ## 工作流
 
@@ -21,6 +22,8 @@ description: X/Twitter AI 资讯监控 Skill。通过 Jina Reader（免认证）
 graph LR
     A["X/Twitter 账号"] --> B["Jina Reader<br/>(免Cookie抓取)"]
     B --> C["Python 解析器"]
+    A -. "可选 X_MONITOR_BACKEND=hermes-tweet" .-> G["Hermes Tweet / Xquik"]
+    G -.-> C
     C --> D["去重/过滤"]
     D --> E["Markdown 报告"]
     F["Exa 搜索<br/>(可选，需API Key)"] -.-> E
@@ -32,6 +35,8 @@ graph LR
 - `pip install -r requirements.txt`
 - 网络能访问 `r.jina.ai`
 - （可选）[Exa API Key](https://exa.ai) — 如需全网热搜补充，设置 `EXA_API_KEY` 环境变量
+- （可选）Hermes Tweet / Xquik API Key — 设置 `X_MONITOR_BACKEND=hermes-tweet`
+  和 `XQUIK_API_KEY`
 
 ## 文件结构
 
@@ -43,6 +48,8 @@ x-ai-monitor/
 ├── scripts/
 │   ├── config.py          # 监控账号列表 & 参数（改这个就行）
 │   ├── monitor.py         # 主扫描脚本
+│   ├── hermes_tweet.py    # Hermes Tweet / Xquik 可选读后端
+│   ├── test_hermes_tweet.py # Hermes Tweet 后端单元测试
 │   ├── org_scan.py        # 机构号增量扫描
 │   └── clean_report.py    # 报告清洗（可选）
 ├── agents/
@@ -104,6 +111,26 @@ python monitor.py --single goodside
 # 跳过 Exa 补充搜索
 python monitor.py --no-exa
 ```
+
+### 4. 可选：切换到 Hermes Tweet / Xquik 读取
+
+默认后端仍是 Jina Reader。需要结构化账号时间线读取时：
+
+```bash
+export X_MONITOR_BACKEND=hermes-tweet
+export XQUIK_API_KEY=xq_...
+python monitor.py --single OpenAI
+```
+
+可选变量：
+
+| 变量 | 说明 |
+|------|------|
+| `X_MONITOR_BACKEND` | `jina` 或 `hermes-tweet` |
+| `XQUIK_API_KEY` | Xquik API key |
+| `XQUIK_BASE_URL` | Xquik API base URL，默认 `https://xquik.com` |
+
+Hermes Tweet 后端只替换账号推文读取。报告生成、去重、过滤和 Exa 补充搜索仍使用本项目原流程。
 
 ## 怎么去重的
 
