@@ -60,3 +60,8 @@ HASH_LIST_MAX = 3000
 
 # 噪声过滤：内容最短长度
 MIN_TWEET_LENGTH = 25
+
+# 可选读后端：默认使用 Jina Reader；设置 X_MONITOR_BACKEND=hermes-tweet 可切换到 Xquik。
+READ_BACKEND = os.environ.get("X_MONITOR_BACKEND", "jina")
+XQUIK_API_KEY = os.environ.get("XQUIK_API_KEY", "")
+XQUIK_BASE_URL = os.environ.get("XQUIK_BASE_URL", "https://xquik.com")
